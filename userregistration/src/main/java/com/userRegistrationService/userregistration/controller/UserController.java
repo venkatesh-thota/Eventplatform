@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(value = "/api/v1")
+//@CrossOrigin(origins = "http://localhost:4200",maxAge = 3600)
 public class UserController {
 
    private UserService userService;
@@ -38,7 +39,7 @@ public class UserController {
         System.out.println("getfound");
         try{
             User user= userService.getUserById(id);
-            responseEntity= new ResponseEntity<String>(user.toString(),HttpStatus.FOUND);
+            responseEntity= new ResponseEntity<User>(user,HttpStatus.FOUND);
         }catch (Exception e){
             System.out.println("notfound");
             responseEntity= new ResponseEntity<String>("Not Found",HttpStatus.NOT_FOUND);

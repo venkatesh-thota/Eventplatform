@@ -3,6 +3,9 @@ package com.userRegistrationService.userregistration.domain;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import java.util.Arrays;
+
 @Document
 public class User {
     @Id
@@ -65,8 +68,8 @@ public class User {
         this.watchList = watchList;
     }
 
-    @Override
-    public String toString() {
+    //@Override
+    //public String toString() {
         /*rteturn "{" +
                 "email=" + email +
                 ", name= '" + name + '\'' +
@@ -75,14 +78,14 @@ public class User {
                 ", ciy='" + city + '\'' +
                 '}';*/
 
-        return   "{" +
+    /*    return   "{" +
                 "email='" + email + '\'' +
                 ", name='" + name + '\'' +
                 ", phoneNumber='" + phoneNumber + '\'' +
                 ", gender='" + gender +'\'' +
                 ", city='" + city + '\'' +
                 '}';
-    }
+    }*/
 
     public String getEmail() {
         return email;
@@ -122,5 +125,20 @@ public class User {
 
     public void setCity(String city) {
         this.city = city;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "email='" + email + '\'' +
+                ", name='" + name + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", gender='" + gender + '\'' +
+                ", city='" + city + '\'' +
+                ", password='" + password + '\'' +
+                ", genre=" + Arrays.toString(genre) +
+                ", language=" + Arrays.toString(language) +
+                ", watchList=" + Arrays.toString(watchList) +
+                '}';
     }
 }
