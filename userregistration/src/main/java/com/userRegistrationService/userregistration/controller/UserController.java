@@ -7,6 +7,8 @@ import com.userRegistrationService.userregistration.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -21,32 +23,39 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PostMapping("user")
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
+
+    @PostMapping("saveuser")
     public ResponseEntity<?> saveUser(@RequestBody User user){
         ResponseEntity responseEntity;
-        System.out.println("got request");
         try{
             userService.saveUser(user);
             responseEntity= new ResponseEntity<String>("Successfully Created", HttpStatus.CREATED);
         }catch (UserAlreadyExistsException e){
             responseEntity = new ResponseEntity<String>(e.getMessage(),HttpStatus.CONFLICT);
+            logger.error(e.getMessage()) ;
+            e.printStackTrace();
+        }
+        catch (Exception e){
+            responseEntity = new ResponseEntity<String>(e.getMessage(), HttpStatus.CONFLICT);
+            logger.error(e.getMessage()) ;
+            e.printStackTrace();
         }
         return responseEntity;
     }
-    @GetMapping(path = "/userid/{id}")
-    public ResponseEntity<?> searchById(@PathVariable("id") String id){
+    @GetMapping(path = "/getuser/{id}")
+    public ResponseEntity<?> getUserById(@PathVariable("id") String id){
         ResponseEntity responseEntity;
-        System.out.println("getfound");
         try{
             User user= userService.getUserById(id);
             responseEntity= new ResponseEntity<User>(user,HttpStatus.FOUND);
         }catch (Exception e){
-            System.out.println("notfound");
-            responseEntity= new ResponseEntity<String>("Not Found",HttpStatus.NOT_FOUND);
+            logger.error(e.getMessage()) ;
+            responseEntity= new ResponseEntity<String>("User Not Found",HttpStatus.NOT_FOUND);
         }
         return responseEntity;
     }
-    @PutMapping("user/{id}")
+    @PutMapping("update/{id}")
     public ResponseEntity<?> updateUserById(@RequestBody User user ,@PathVariable("id") String id){
         ResponseEntity responseEntity;
         try {
@@ -54,6 +63,20 @@ public class UserController {
             responseEntity = new ResponseEntity<String>("Successfully Updated",HttpStatus.CREATED);
         }catch (Exception e){
             responseEntity =new ResponseEntity<String>(e.getMessage(), HttpStatus.CONFLICT);
+            logger.error(e.getMessage()) ;
+        }
+        return responseEntity;
+    }
+
+    @DeleteMapping("delete/{id}")
+    public ResponseEntity<?> deleteUserById(@PathVariable("id") String id){
+        ResponseEntity responseEntity;
+        try {
+            userService.deleteUserById(id);
+            responseEntity = new ResponseEntity<String>("Successfully deleted",HttpStatus.CREATED);
+        }catch (Exception e){
+            responseEntity =new ResponseEntity<String>(e.getMessage(), HttpStatus.CONFLICT);
+            logger.error(e.getMessage()) ;
         }
         return responseEntity;
     }

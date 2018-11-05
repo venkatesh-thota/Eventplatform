@@ -68,25 +68,6 @@ public class User {
         this.watchList = watchList;
     }
 
-    //@Override
-    //public String toString() {
-        /*rteturn "{" +
-                "email=" + email +
-                ", name= '" + name + '\'' +
-                ", phoneNumber='" + phoneNumber + '\'' +
-                ", gender=" + gender +
-                ", ciy='" + city + '\'' +
-                '}';*/
-
-    /*    return   "{" +
-                "email='" + email + '\'' +
-                ", name='" + name + '\'' +
-                ", phoneNumber='" + phoneNumber + '\'' +
-                ", gender='" + gender +'\'' +
-                ", city='" + city + '\'' +
-                '}';
-    }*/
-
     public String getEmail() {
         return email;
     }

@@ -1,5 +1,6 @@
 package com.userRegistrationService.userregistration.service;
 
+import com.userRegistrationService.userregistration.Exception.NoSuchUserException;
 import com.userRegistrationService.userregistration.Exception.UserAlreadyExistsException;
 import com.userRegistrationService.userregistration.domain.User;
 import com.userRegistrationService.userregistration.repository.UserRepository;
@@ -19,16 +20,16 @@ public class UserImpl implements UserService {
     @Override
     public User saveUser(User user) throws UserAlreadyExistsException {
         if(userRepository.existsById(user.getEmail())){
-            throw new UserAlreadyExistsException("Movie already Exists");
+            throw new UserAlreadyExistsException("User already Exists");
         }
-        User saveduser= userRepository.save(user);
-        if(saveduser==null)
-            throw new UserAlreadyExistsException("Movie already Exists");
-        return saveduser;
+        else {
+            User saveduser = userRepository.save(user);
+            return saveduser;
+        }
     }
 
     @Override
-    public User updateUserById(String id, User user) {
+    public User updateUserById(String id, User user)throws NoSuchUserException {
         User newuser=null;
         if(userRepository.existsById(id)) {
             newuser = getUserById(id);
@@ -37,14 +38,32 @@ public class UserImpl implements UserService {
             newuser.setGender(user.getGender());
             newuser.setName(user.getName());
             newuser.setPhoneNumber(user.getPhoneNumber());
+            newuser.setLanguage(user.getLanguage());
+            newuser.setGenre(user.getGenre());
+            newuser.setGenre(user.getWatchList());
+            User savedmovie=userRepository.save(user);
+            return savedmovie;
         }
-        User savedmovie=userRepository.save(user);
-        return savedmovie;
+        else{
+            throw new NoSuchUserException("No user Found");
+        }
     }
 
     @Override
     public User getUserById(String id) {
         User user= userRepository.findById(id).get();
         return user;
+    }
+
+    @Override
+    public Boolean deleteUserById(String id) throws NoSuchUserException {
+        if(userRepository.existsById(id)==false){
+            throw new NoSuchUserException("No user Found");
+        }
+        else{
+            User deletedUser=getUserById(id);
+            userRepository.delete(deletedUser);
+            return true;
+        }
     }
 }
